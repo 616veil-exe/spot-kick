@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#1e3560">
+<title>Spot Kick – online penalty shootout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{"imports":{"three":"/vendor/three/three.module.js"}}</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<header id="hud" hidden>
+  <div class="side"><div id="n0" class="nm"></div><div id="d0" class="dots"></div></div>
+  <div class="mid"><div id="score">0 – 0</div><div id="sub"></div><div id="timer"></div></div>
+  <div class="side r"><div id="n1" class="nm"></div><div id="d1" class="dots"></div></div>
+</header>
+
+<div id="banner"></div>
+
+<div class="tools">
+  <button id="btnMute" aria-label="Sound">Sound on</button>
+  <button id="btnQ" aria-label="Graphics quality">Graphics: high</button>
+</div>
+
+<section id="home" class="overlay">
+  <div class="card">
+    <h1>Spot Kick</h1>
+    <p class="lead">Penalty shootout for two. Share a room code and play.</p>
+    <label>Your name<input id="name" maxlength="14" autocomplete="off" placeholder="Player"></label>
+    <button id="btnCreate" class="primary">Create room</button>
+    <div class="or">or join a friend</div>
+    <div class="row">
+      <input id="code" maxlength="4" autocomplete="off" placeholder="CODE" aria-label="Room code">
+      <button id="btnJoin">Join room</button>
+    </div>
+    <div id="homeMsg" class="msg"></div>
+  </div>
+</section>
+
+<section id="lobby" class="overlay" hidden>
+  <div class="card">
+    <p class="lead">Room code</p>
+    <div id="roomCode"></div>
+    <button id="btnCopy" class="primary">Copy invite link</button>
+    <p id="lobbyMsg" class="lead">Waiting for your friend to join…</p>
+    <button id="btnLobbyLeave">Close room</button>
+  </div>
+</section>
+
+<section id="over" class="overlay" hidden>
+  <div class="card">
+    <h2 id="overTitle"></h2>
+    <div id="overScore"></div>
+    <button id="btnRematch" class="primary">Rematch</button>
+    <button id="btnLeave">Leave room</button>
+    <p id="overMsg" class="lead"></p>
+  </div>
+</section>
+
+<footer id="bottom" hidden>
+  <div id="hint"></div>
+  <div id="kickPanel" hidden>
+    <label>Power <input id="power" type="range" min="0" max="100" value="60"></label>
+    <label>Curve <input id="curve" type="range" min="-100" max="100" value="0"></label>
+    <button id="btnShoot" class="primary">Shoot</button>
+  </div>
+  <div id="keepPanel" hidden>
+    <div id="zones">
+      <button data-z="0">Top left</button><button data-z="1">Top centre</button><button data-z="2">Top right</button>
+      <button data-z="3">Low left</button><button data-z="4">Low centre</button><button data-z="5">Low right</button>
+    </div>
+    <button id="btnDive" class="primary">Dive</button>
+  </div>
+</footer>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="module" src="game.js"></script>
+</body>
+</html>
