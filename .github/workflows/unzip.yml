@@ -1,0 +1,59 @@
+name: Auto Unzip
+
+on:
+  push:
+    paths:
+      - "*.zip"
+      - "**/*.zip"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find and unzip uploaded ZIP
+        shell: bash
+        run: |
+          set -e
+
+          ZIP_FILE=$(find . -type f -iname "*.zip" -not -path "./.git/*" | head -n 1)
+
+          if [ -z "$ZIP_FILE" ]; then
+            echo "No ZIP file found."
+            exit 0
+          fi
+
+          echo "Found ZIP: $ZIP_FILE"
+
+          # Extract directly into repository root
+          unzip -o "$ZIP_FILE" -d .
+
+          # Remove the uploaded ZIP
+          rm -f "$ZIP_FILE"
+
+          echo "ZIP extracted successfully."
+
+      - name: Commit extracted files
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Auto unzip uploaded files"
+          git push
